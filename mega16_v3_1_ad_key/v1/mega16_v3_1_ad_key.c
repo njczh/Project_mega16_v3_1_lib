@@ -1,3 +1,6 @@
+#include <iom16v.h>
+#include <macros.h>
+
 #include "mega16_v3_1_ad_key.h"
 
 #define  key_state_0 0
@@ -24,8 +27,8 @@ unsigned int GetAdData(void)
 	while (!(ADCSRA & (1 << ADIF)));
 	ADCSRA |= (1 << ADIF);
 
-	adc_data = ADCL;           	   		 // Read 8 low bits first (important)
-	adc_data |= (unsigned int)ADCH << 8;  // read 2 high bits and shift into top byte
+	adc_data = ADCL;           	   		 	// Read 8 low bits first (important)
+	adc_data |= (unsigned int)ADCH << 8;  	// read 2 high bits and shift into top byte
 
 	return adc_data;
 
@@ -40,12 +43,12 @@ unsigned char GetAdKey(void)
 
 	adc_data = GetAdData();
 
-	if (adc_data <= 127) { key_value = 1; } // right
-	else if (adc_data <= 332) { key_value = 2; } // down
-	else if (adc_data <= 460) { key_value = 4; } // left
-	else if (adc_data <= 548) { key_value = 3; } // up
-	else if (adc_data <= 612) { key_value = 6; } // confirm
-	else if (adc_data <= 700) { key_value = 5; } // cancel
+	if (adc_data <= 127)      { key_value = 1; } 		// right
+	else if (adc_data <= 332) { key_value = 2; }	// down
+	else if (adc_data <= 460) { key_value = 4; } 	// left
+	else if (adc_data <= 548) { key_value = 3; } 	// up
+	else if (adc_data <= 612) { key_value = 6; } 	// confirm
+	else if (adc_data <= 700) { key_value = 5; } 	// cancel
 	else { key_value = 0; }
 
 	return key_value;

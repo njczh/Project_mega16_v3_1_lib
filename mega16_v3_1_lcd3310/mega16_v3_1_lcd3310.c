@@ -1,19 +1,10 @@
-/************************************************************
-**  Copyright (C) Cao Zhenghui Co. Ltd.
-**  All rights reserved.
-**
-**  FileName: 	mega16_v3_1_lcd3310.c
-**  Author:	Cao Zhenghui
-***********************************************************/
-
-
 #include <iom16v.h>
 #include <macros.h>
 
 #include "mega16_v3_1_lcd3310.h"
 #include "english6x8Pixel.h"
 
- //SPI initialize
+// SPI initialize
 // clock rate: 1843199hz
 void InitSpi(void)
 {
@@ -91,7 +82,7 @@ void LcdInit(void)
 
 	LcdWriteByte(0x21, 0);	// use extended instruction set
 	LcdWriteByte(0xc8, 0);	// set Bias System
-	LcdWriteByte(0x06, 0);	// set Temperature Coefficient
+	LcdWriteByte(0x07, 0);	// set Temperature Coefficient
 	LcdWriteByte(0x13, 0);	// 1:48
 	LcdWriteByte(0x20, 0);	// use basic instruction set
 	LcdWriteByte(0x0c, 0);	// display mode : normal
@@ -130,6 +121,7 @@ void LcdWriteInverseChar(unsigned char c)
 void LcdWriteEnglishString(unsigned char X, unsigned char Y, unsigned char inverse ,unsigned char *s)
 {
 	LcdSetXY(X, Y);
+	
 	if(inverse)
 	{
 		while (*s)

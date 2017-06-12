@@ -1,148 +1,103 @@
 #ifndef        __MENU_h__
 #define        __MENU_h__
 
+// const struct MenuItem* menu_point = main_menu ; //main()
+
 #include "mega16_v3_1_func.h"
 
-#define CLOCK_MENU_NUMS 2
+#define NULL ((void*)0)
+
+#define DISPLAY_ITEMS 4
+
+#define MAIN_MENU_NUMS 5
+
+#define TIME_MENU_NUMS 1
+
+#define STOPWATCH_MENU_NUMS 2
+
+#define LED_MENU_NUMS 5
+
+#define TEMP_MENU_NUMS 1
+
+#define SET_MENU_NUMS 2
+
 
 struct MenuItem
 {
 
-	short menu_count;
+	const short menu_count;
 
-	char *disp_str;
+	char * const disp_str;
 
-	void (*Subs)();
+	void(*Subs)();
 
-	struct MenuItem *children_menus;
+	const struct MenuItem *children_menus;
 
-	struct MenuItem *parent_menus;
+	const struct MenuItem *parent_menus;
 
+	char * const disp_title;
+	
 };
 
-struct MenuItem main_menu[5];
+extern const struct MenuItem main_menu[			MAIN_MENU_NUMS		];
 
-struct MenuItem clock_menu[CLOCK_MENU_NUMS];
+extern const struct MenuItem time_menu[			TIME_MENU_NUMS		];
 
-struct MenuItem time_menu[4];
+extern const struct MenuItem stopwatch_menu[	STOPWATCH_MENU_NUMS	];
 
-struct MenuItem led_menu[4];
+extern const struct MenuItem led_menu[			LED_MENU_NUMS		];
 
-struct MenuItem temp_menu[4];
+extern const struct MenuItem temp_menu[			TEMP_MENU_NUMS		];
 
-struct MenuItem file_menu[4];
+extern const struct MenuItem setting_menu[		SET_MENU_NUMS		];
+
+
 
 void NullSubs(void)
 {
-
+	// JUST NULL
 }
 
-void InitMainMenu(void)
 
-{
+// main_menu
+const struct MenuItem main_menu[MAIN_MENU_NUMS] = {
+	{ MAIN_MENU_NUMS,		"1 LED Control ",	NullSubs, 		led_menu, 			NULL,			"   MAIN MENU" },
+	{ MAIN_MENU_NUMS,		"2 Clock       ",	NullSubs, 		time_menu, 			NULL },
+	{ MAIN_MENU_NUMS,		"3 Temperture  ",	NullSubs, 		temp_menu, 			NULL },
+	{ MAIN_MENU_NUMS,		"4 Settings    ",	NullSubs, 		setting_menu,		NULL },
+	{ MAIN_MENU_NUMS,		"5 About System",	AboutSystem,	NULL,	  			NULL } 
+};
 
-	main_menu[0].menu_count = 5;
+// time_menu
+const struct MenuItem time_menu[TIME_MENU_NUMS] = {
+	{ TIME_MENU_NUMS,		"1 Stopwatch   ",	NullSubs,	 	stopwatch_menu,	   main_menu,		"   TIME MENU" }
+	//{ TIME_MENU_NUMS,		"2 SET Time  :)",	NullSubs,		NULL,	  		   main_menu }
+};
 
-	main_menu[0].disp_str = "1 Clock      ";
+// stopwatch_menu
+const struct MenuItem stopwatch_menu[STOPWATCH_MENU_NUMS] = {
+	{ STOPWATCH_MENU_NUMS,	"1 Start/Pause ",	StopWatch,		NULL,				time_menu,		"   STOPWATCH" },
+	{ STOPWATCH_MENU_NUMS,	"2 Reset       ",	ResetTime,		NULL,				time_menu }
+};
 
-	main_menu[0].Subs = NullSubs;
+// led_menu
+const struct MenuItem led_menu[LED_MENU_NUMS] = {
+	{ LED_MENU_NUMS,		"1 Lighten  All",	LightenAll,		NULL,				main_menu,		"   LED MENU" },
+	{ LED_MENU_NUMS,		"2 LightOFF All",	LightOffAll, 	NULL,				main_menu },
+	{ LED_MENU_NUMS,		"3 Left Shift  ",	LeftShift,	 	NULL,				main_menu },
+	{ LED_MENU_NUMS,		"4 Right Shift ",	RightShift,		NULL,				main_menu },
+	{ LED_MENU_NUMS,		"5 Customize   ",	CustomizeLed,	NULL,				main_menu } };
 
-	main_menu[0].children_menus = clock_menu;
+// temp_menu
+const struct MenuItem temp_menu[TEMP_MENU_NUMS] = {
+	{ TEMP_MENU_NUMS,		"1 Show Temp   ",	ShowTemp,		NULL,				main_menu,		"   TEMP MENU" }
+};
 
-	main_menu[0].parent_menus = 0;
+// setting_menu
+const struct MenuItem setting_menu[SET_MENU_NUMS] = {
+	{ SET_MENU_NUMS,		"1 Volume      ",	SetVolume,		NULL,				main_menu,		" SETTING MENU" },
+	{ SET_MENU_NUMS,		"2 Reset System",	ResetSystem,	NULL,				main_menu }
+};
 
-
-	main_menu[1].menu_count = 5;
-
-	main_menu[1].disp_str = "2 Time       ";
-
-	main_menu[1].Subs = NullSubs;
-
-	main_menu[1].children_menus = time_menu;
-
-	main_menu[1].parent_menus = 0;
-
-
-	main_menu[2].menu_count = 5;
-
-	main_menu[2].disp_str = "3 LED Control";
-
-	main_menu[2].Subs = NullSubs;
-
-	main_menu[2].children_menus = led_menu;
-
-	main_menu[2].parent_menus = 0;
-
-
-	main_menu[3].menu_count = 5;
-
-	main_menu[3].disp_str = "4 Temperture ";
-
-	main_menu[3].Subs = NullSubs;
-
-	main_menu[3].children_menus = temp_menu;
-
-	main_menu[3].parent_menus = 0;
-
-
-	main_menu[4].menu_count = 5;
-
-	main_menu[4].disp_str = "5 File System";
-
-	main_menu[4].Subs = NullSubs;
-
-	main_menu[4].children_menus = file_menu;
-
-	main_menu[4].parent_menus = 0;
-	
-
-}
-
-void InitClockMenu(void)
-{
-
- 	clock_menu[0].menu_count = CLOCK_MENU_NUMS;
-	
-	clock_menu[0].disp_str = "1 Show Time  ";
-	
-	clock_menu[0].Subs = NullSubs;
-	
-	clock_menu[0].children_menus = 0;
-	
-	clock_menu[0].parent_menus = main_menu;
-	
-	
-	clock_menu[1].menu_count = CLOCK_MENU_NUMS;
-	
-	clock_menu[1].disp_str = "2 Set Time   ";
-	
-	clock_menu[1].Subs = NullSubs;
-	
-	clock_menu[1].children_menus = 0;
-	
-	clock_menu[1].parent_menus = main_menu;
-	
-	
-}
-
-void InitTimeMenu(void)
-{
-
-}
-
-void InitLedMenu(void)
-{
-
-}
-
-void InitTempMenu(void) 
-{
-
-}
-
-void InitFileMenu(void)
-{
-
-}
 
 #endif
